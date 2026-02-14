@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marci Metzger Homes - Premium Real Estate</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts for Premium Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+            background-color: #0a0f15;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #c7a454;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: #c7a454;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Premium Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0f15;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: #c7a454;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 1px;
+            background: rgba(199, 164, 84, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #c7a454;
+            animation: load 2s ease forwards;
+        }
+
+        @keyframes load {
+            to { left: 0; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        /* Main Content */
+        .content {
+            opacity: 0;
+            transition: opacity 1s ease;
+            position: relative;
+        }
+
+        .content.visible {
+            opacity: 1;
+        }
+
+        /* Three.js Canvas */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Premium Navigation */
+        nav {
+            position: fixed;
+            top: 2rem;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #fff;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #c7a454;
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover::after {
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #c7a454;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links a:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Hero Section with Mansion Background */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8rem;
+            z-index: 2;
+            isolation: isolate;
+        }
+
+        /* Mansion Background Image */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            filter: brightness(0.35) saturate(1.3);
+            transform: scale(1.05);
+            animation: slowZoom 20s infinite alternate ease-in-out;
+        }
+
+        /* Dark overlay */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.7) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Hero content */
+        .hero-content {
+            max-width: 800px;
+            background: rgba(10, 15, 21, 0.4);
+            backdrop-filter: blur(8px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(199, 164, 84, 0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-pre-title {
+            font-size: 1rem;
+            letter-spacing: 6px;
+            color: #c7a454;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.5s forwards;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6rem;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.7s forwards;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero-title span {
+            color: #c7a454;
+            font-style: italic;
+            text-shadow: 0 0 25px rgba(199, 164, 84, 0.6);
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.9s forwards;
+            color: rgba(255,255,255,0.95);
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 1.1s forwards;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #c7a454;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(199, 164, 84, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.95);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 1.3s forwards;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #c7a454;
+            color: #0a0f15;
+            border: none;
+            box-shadow: 0 5px 20px rgba(199, 164, 84, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: #d4b268;
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(199, 164, 84, 0.6);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.6);
+            color: #fff;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-outline:hover {
+            border-color: #c7a454;
+            background: rgba(199, 164, 84, 0.2);
+            box-shadow: 0 10px 30px rgba(199, 164, 84, 0.4);
+        }
+
+        /* Services Section */
+        section:not(.hero-section):not(.gallery-section):not(.reviews-section):not(.search-section):not(.contact-section) {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8rem;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            width: 100%;
+        }
+
+        .service-card {
+            background: rgba(20, 25, 35, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(199, 164, 84, 0.25);
+            padding: 3rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(199, 164, 84, 0.15), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: #c7a454;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            background: rgba(30, 35, 45, 0.8);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: #c7a454;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 15px rgba(199, 164, 84, 0.4);
+        }
+
+        .service-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .service-card p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+            font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* GALLERY SECTION */
+        .gallery-section {
+            min-height: 120vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 8rem;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .section-title::before {
+            content: '✦';
+            color: #c7a454;
+            font-size: 3rem;
+            position: absolute;
+            left: 25%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.8;
+            animation: sparkleLeft 2s infinite;
+            text-shadow: 0 0 20px #c7a454;
+        }
+
+        .section-title::after {
+            content: '✦';
+            color: #c7a454;
+            font-size: 3rem;
+            position: absolute;
+            right: 25%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.8;
+            animation: sparkleRight 2s infinite;
+            text-shadow: 0 0 20px #c7a454;
+        }
+
+        @keyframes sparkleLeft {
+            0%, 100% { opacity: 0.5; left: 24%; transform: translateY(-50%) scale(1); }
+            50% { opacity: 1; left: 26%; transform: translateY(-50%) scale(1.3); text-shadow: 0 0 30px #c7a454; }
+        }
+
+        @keyframes sparkleRight {
+            0%, 100% { opacity: 0.5; right: 24%; transform: translateY(-50%) scale(1); }
+            50% { opacity: 1; right: 26%; transform: translateY(-50%) scale(1.3); text-shadow: 0 0 30px #c7a454; }
+        }
+
+        .section-title span {
+            color: #c7a454;
+            position: relative;
+            display: inline-block;
+            font-weight: 400;
+        }
+
+        .section-title span::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c7a454, #c7a454, #c7a454, transparent);
+            box-shadow: 0 0 15px #c7a454;
+        }
+
+        .gallery-counter {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            color: rgba(199, 164, 84, 0.9);
+            font-weight: 300;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .gallery-counter span {
+            color: #c7a454;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-right: 0.5rem;
+            text-shadow: 0 0 20px rgba(199, 164, 84, 0.5);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            border: 2px solid rgba(199, 164, 84, 0.3);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: scale(1);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.08);
+            border-color: #c7a454;
+            box-shadow: 0 40px 80px rgba(199, 164, 84, 0.5);
+            z-index: 10;
+        }
+
+        .gallery-item:nth-child(1):hover {
+            transform: scale(1.12) rotate(1deg);
+        }
+        
+        .gallery-item:nth-child(3):hover {
+            transform: scale(1.12) rotate(-1deg);
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(199, 164, 84, 0.3), transparent);
+            transition: left 0.8s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .gallery-item:hover::before {
+            left: 100%;
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 2px solid rgba(199, 164, 84, 0.8);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.5s ease;
+            z-index: 2;
+            pointer-events: none;
+            box-shadow: inset 0 0 30px rgba(199, 164, 84, 0.3);
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: brightness(0.9) saturate(1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.2);
+            filter: brightness(1.1) saturate(1.2);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(199, 164, 84, 0.2), rgba(0,0,0,0.7));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 3;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay i {
+            color: #fff;
+            font-size: 3.5rem;
+            background: rgba(199, 164, 84, 0.4);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #c7a454;
+            transform: scale(0.5) rotate(-10deg);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 0 50px rgba(199, 164, 84, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .gallery-item:hover .gallery-overlay i {
+            transform: scale(1) rotate(0deg);
+        }
+
+        .gallery-highlight {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(199, 164, 84, 0.2);
+            border: 2px solid rgba(199, 164, 84, 0.6);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .highlight-dot.active {
+            background: #c7a454;
+            transform: scale(1.8);
+            box-shadow: 0 0 30px #c7a454;
+            border-color: #fff;
+        }
+
+        .highlight-dot:hover {
+            background: #c7a454;
+            transform: scale(1.5);
+            box-shadow: 0 0 25px rgba(199, 164, 84, 0.9);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 4;
+            text-transform: uppercase;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .gallery-item:hover .gallery-caption {
+            bottom: 20px;
+            opacity: 1;
+        }
+
+        /* REVIEWS SECTION */
+        .reviews-section {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 8rem;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .reviews-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .reviews-subtitle {
+            text-align: center;
+            color: rgba(199, 164, 84, 0.9);
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            margin-bottom: 4rem;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            background: rgba(20, 25, 35, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(199, 164, 84, 0.2);
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px);
+            border-color: #c7a454;
+            box-shadow: 0 30px 50px rgba(199, 164, 84, 0.2);
+            background: rgba(30, 35, 45, 0.7);
+        }
+
+        .review-quote {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 4rem;
+            color: rgba(199, 164, 84, 0.2);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .review-rating {
+            color: #c7a454;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 3px;
+        }
+
+        .review-rating i {
+            margin-right: 2px;
+            text-shadow: 0 0 10px rgba(199, 164, 84, 0.4);
+        }
+
+        .review-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: rgba(255,255,255,0.9);
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-top: 1px solid rgba(199, 164, 84, 0.2);
+            padding-top: 1.5rem;
+        }
+
+        .review-author-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c7a454, #8a6e4a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #0a0f15;
+            box-shadow: 0 5px 15px rgba(199, 164, 84, 0.3);
+        }
+
+        .review-author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .review-author-info p {
+            font-size: 0.85rem;
+            color: rgba(199, 164, 84, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .reviews-cta {
+            text-align: center;
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .reviews-cta .btn-outline {
+            border-color: rgba(199, 164, 84, 0.5);
+            color: #fff;
+            padding: 1rem 3rem;
+            font-size: 0.9rem;
+        }
+
+        .reviews-cta .btn-outline:hover {
+            border-color: #c7a454;
+            background: rgba(199, 164, 84, 0.15);
+        }
+
+        /* SEARCH SECTION - NEW */
+        .search-section {
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 8rem 6rem 8rem;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            margin-top: 0;
+        }
+
+        .search-container {
+            background: rgba(20, 25, 35, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(199, 164, 84, 0.3);
+            padding: 3rem;
+            border-radius: 12px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(199, 164, 84, 0.3);
+            padding-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .agent-info h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 0.3rem;
+            color: #fff;
+        }
+
+        .agent-info h2 span {
+            color: #c7a454;
+        }
+
+        .agent-info p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .call-now {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(199, 164, 84, 0.15);
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            border: 1px solid rgba(199, 164, 84, 0.4);
+        }
+
+        .call-now i {
+            font-size: 1.8rem;
+            color: #c7a454;
+        }
+
+        .call-now div {
+            text-align: right;
+        }
+
+        .call-now .call-text {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px;
+        }
+
+        .call-now .phone-number {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #c7a454;
+            letter-spacing: 1px;
+        }
+
+        .search-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .search-title i {
+            color: #c7a454;
+            margin-right: 0.8rem;
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(199, 164, 84, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            background: rgba(10, 15, 21, 0.6);
+            border: 1px solid rgba(199, 164, 84, 0.3);
+            padding: 0.8rem 1rem;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter-group select:hover,
+        .filter-group input:hover {
+            border-color: #c7a454;
+            background: rgba(20, 25, 35, 0.8);
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #c7a454;
+            box-shadow: 0 0 15px rgba(199, 164, 84, 0.3);
+        }
+
+        .filter-group select option {
+            background: #0a0f15;
+            color: #fff;
+        }
+
+        .price-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        .search-button {
+            grid-column: span 4;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .search-button .btn-primary {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            width: 100%;
+            max-width: 300px;
+            background: #c7a454;
+            border: none;
+            color: #0a0f15;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-button .btn-primary:hover {
+            background: #d4b268;
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(199, 164, 84, 0.4);
+        }
+
+        .search-button .btn-primary i {
+            margin-right: 0.8rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8rem;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            width: 100%;
+            background: rgba(20, 25, 35, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(199, 164, 84, 0.25);
+            padding: 4rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .contact-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .contact-detail i {
+            color: #c7a454;
+            width: 30px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(199, 164, 84, 0.4);
+        }
+
+        .hours {
+            background: rgba(199, 164, 84, 0.15);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 2px solid #c7a454;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: #25D366;
+            color: #fff;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(18, 140, 126, 0.4);
+        }
+
+        /* Cookie Notice */
+        .cookie-notice {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            right: 2rem;
+            background: rgba(10, 15, 21, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(199, 164, 84, 0.3);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(200%);
+            transition: transform 0.5s ease;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cookie-notice.show {
+            transform: translateY(0);
+        }
+
+        .cookie-notice p {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+        }
+
+        .cookie-notice a {
+            color: #c7a454;
+            text-decoration: none;
+        }
+
+        .cookie-close {
+            background: #c7a454;
+            border: none;
+            color: #0a0f15;
+            padding: 0.5rem 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .cookie-close:hover {
+            background: #d4b268;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            color: #fff;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transform: rotate(90deg) translateX(-50%);
+            transform-origin: right;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .scroll-indicator:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-section,
+            section:not(.hero-section) {
+                padding: 0 4rem;
+            }
+            .gallery-section,
+            .reviews-section,
+            .search-section,
+            .contact-section {
+                padding: 4rem;
+            }
+            .hero-title {
+                font-size: 4rem;
+            }
+            .section-title::before {
+                left: 15%;
+            }
+            .section-title::after {
+                right: 15%;
+            }
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .search-filters {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .search-button {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 2rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                gap: 1.5rem;
+            }
+            .hero-section,
+            section:not(.hero-section) {
+                padding: 0 2rem;
+            }
+            .gallery-section,
+            .reviews-section,
+            .search-section,
+            .contact-section {
+                padding: 2rem;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+            .hero-content {
+                padding: 2rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .section-title {
+                font-size: 3rem;
+            }
+            .section-title::before {
+                left: 5%;
+                font-size: 2rem;
+            }
+            .section-title::after {
+                right: 5%;
+                font-size: 2rem;
+            }
+            .reviews-title {
+                font-size: 3rem;
+            }
+            .search-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .call-now {
+                width: 100%;
+                justify-content: center;
+            }
+            .search-filters {
+                grid-template-columns: 1fr;
+            }
+            .search-button {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">MARCI METZGER</div>
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+
+    <!-- Three.js Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <!-- Navigation -->
+        <nav>
+            <a href="#" class="logo">MARCI METZGER</a>
+            <div class="nav-links">
+                <a href="#">HOME</a>
+                <a href="#">BUYERS</a>
+                <a href="#">SELLERS</a>
+                <a href="#">LISTINGS</a>
+                <a href="#">CONTACT</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-pre-title">PREMIUM REAL ESTATE</div>
+                <h1 class="hero-title">GET IT <span>SOLD</span></h1>
+                <p class="hero-description">
+                    Top Residential Sales Last 5 Years. We helped nearly 90 clients in 2021, 
+                    and closed 28.5 million in sales! Our team works hard everyday to grow 
+                    and learn, so that we may continue to excel in our market.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">90+</div>
+                        <div class="stat-label">CLIENTS (2021)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">$28.5M</div>
+                        <div class="stat-label">SALES VOLUME</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">YEARS TOP SALES</div>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">SEARCH LISTINGS</a>
+                    <a href="#" class="btn btn-outline">BUYER'S GUIDE</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-building service-icon"></i>
+                    <h3>Commercial & Residential</h3>
+                    <p>Large or small, condo or mansion, fixer-upper or luxury — we can find it and get it at the price that's right. We live, work, and play in this community.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-chart-line service-icon"></i>
+                    <h3>Rely on Expertise</h3>
+                    <p>Questions about affordability, credit, loans? We connect you with the right people for fast, clear answers. We make sure you feel confident every step.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-users service-icon"></i>
+                    <h3>Guide to Buyers</h3>
+                    <p>Market analysis, upgrades lists, contractors on speed dial. Nobody knows the market like we do. Enjoy having a pro at your service.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-bullhorn service-icon"></i>
+                    <h3>Get it SOLD!</h3>
+                    <p>We exhaust every avenue to put your listing in front of every possible buyer, getting you top dollar for your home. Don't just list it... Get it SOLD!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY SECTION -->
+        <section class="gallery-section">
+            <h2 class="section-title">PHOTO <span>GALLERY</span></h2>
+            
+            <div class="gallery-counter">
+                <span>04</span> LUXURY PROPERTIES
+            </div>
+            
+            <div class="gallery-highlight">
+                <span class="highlight-dot active" data-index="0"></span>
+                <span class="highlight-dot" data-index="1"></span>
+                <span class="highlight-dot" data-index="2"></span>
+                <span class="highlight-dot" data-index="3"></span>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item" data-index="0">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Luxury Home">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">MODERN VILLA</div>
+                </div>
+                <div class="gallery-item" data-index="1">
+                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Modern Interior">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">LUXURY INTERIOR</div>
+                </div>
+                <div class="gallery-item" data-index="2">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Luxury Kitchen">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">GOURMET KITCHEN</div>
+                </div>
+                <div class="gallery-item" data-index="3">
+                    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Dream Bedroom">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">MASTER SUITE</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REVIEWS SECTION -->
+        <section class="reviews-section">
+            <h2 class="reviews-title">CLIENT <span style="color: #c7a454;">TESTIMONIALS</span></h2>
+            <div class="reviews-subtitle">WHAT OUR CLIENTS SAY</div>
+            
+            <div class="reviews-grid">
+                <!-- Review 1 -->
+                <div class="review-card">
+                    <div class="review-quote">"</div>
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"Marci and her team went above and beyond to sell our home. They staged it beautifully, marketed it aggressively, and had multiple offers in just 3 days. We sold for $50k over asking! Absolutely incredible service."</p>
+                    <div class="review-author">
+                        <div class="review-author-img">JD</div>
+                        <div class="review-author-info">
+                            <h4>James & Diana Robertson</h4>
+                            <p>PAHRUMP, NV</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="review-card">
+                    <div class="review-quote">"</div>
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"As first-time homebuyers, we were nervous about the process. Marci guided us every step of the way, explained everything clearly, and found us the perfect home within our budget. We couldn't be happier!"</p>
+                    <div class="review-author">
+                        <div class="review-author-img">MT</div>
+                        <div class="review-author-info">
+                            <h4>Michael Thompson</h4>
+                            <p>LAS VEGAS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="review-card">
+                    <div class="review-quote">"</div>
+                    <div class="review-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"I've worked with many real estate agents over the years, but Marci is by far the most professional and knowledgeable. Her market analysis was spot-on, and she negotiated an amazing deal on my investment property."</p>
+                    <div class="review-author">
+                        <div class="review-author-img">RC</div>
+                        <div class="review-author-info">
+                            <h4>Robert Chen</h4>
+                            <p>INVESTOR</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews-cta">
+                <a href="#" class="btn btn-outline">READ MORE TESTIMONIALS <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+            </div>
+        </section>
+
+        <!-- SEARCH SECTION - NOW WITH PROPER SPACING -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-header">
+                    <div class="agent-info">
+                        <h2>MARCI METZGER <span>- THE RIDGE REALTY GROUP</span></h2>
+                        <p>Pahrump Realtor</p>
+                    </div>
+                    <div class="call-now">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <div class="call-text">CALL NOW</div>
+                            <div class="phone-number">(775) 555-0123</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-title">
+                    <i class="fas fa-search"></i> Search Listings
+                </div>
+
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label>Location</label>
+                        <select>
+                            <option>Pahrump, NV</option>
+                            <option>Las Vegas, NV</option>
+                            <option>Summerlin, NV</option>
+                            <option>Henderson, NV</option>
+                            <option>Reno, NV</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Type</label>
+                        <select>
+                            <option>Any Type</option>
+                            <option>Single Family</option>
+                            <option>Condo</option>
+                            <option>Townhouse</option>
+                            <option>Luxury Estate</option>
+                            <option>Commercial</option>
+                            <option>Land</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Sort By</label>
+                        <select>
+                            <option>Newest First</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Bedrooms: High to Low</option>
+                            <option>Bathrooms: High to Low</option>
+                            <option>Square Feet: High to Low</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Bedrooms</label>
+                        <select>
+                            <option>Any Number</option>
+                            <option>1+ Bedroom</option>
+                            <option>2+ Bedrooms</option>
+                            <option>3+ Bedrooms</option>
+                            <option>4+ Bedrooms</option>
+                            <option>5+ Bedrooms</option>
+                            <option>6+ Bedrooms</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Baths</label>
+                        <select>
+                            <option>Any Number</option>
+                            <option>1+ Bath</option>
+                            <option>2+ Baths</option>
+                            <option>3+ Baths</option>
+                            <option>4+ Baths</option>
+                            <option>5+ Baths</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Min Price</label>
+                        <select>
+                            <option>$0</option>
+                            <option>$100,000</option>
+                            <option>$200,000</option>
+                            <option>$300,000</option>
+                            <option>$400,000</option>
+                            <option>$500,000</option>
+                            <option>$600,000</option>
+                            <option>$700,000</option>
+                            <option>$800,000</option>
+                            <option>$900,000</option>
+                            <option>$1,000,000</option>
+                            <option>$1,500,000</option>
+                            <option>$2,000,000</option>
+                            <option>$2,500,000</option>
+                            <option>$3,000,000+</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Max Price</label>
+                        <select>
+                            <option>$100,000</option>
+                            <option>$200,000</option>
+                            <option>$300,000</option>
+                            <option>$400,000</option>
+                            <option>$500,000</option>
+                            <option>$600,000</option>
+                            <option>$700,000</option>
+                            <option>$800,000</option>
+                            <option>$900,000</option>
+                            <option>$1,000,000</option>
+                            <option>$1,500,000</option>
+                            <option>$2,000,000</option>
+                            <option>$2,500,000</option>
+                            <option>$3,000,000</option>
+                            <option>$5,000,000+</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label> </label>
+                        <!-- Empty for grid alignment -->
+                    </div>
+
+                    <div class="search-button">
+                        <button class="btn btn-primary"><i class="fas fa-search"></i> SEARCH</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Call or Visit</h3>
+                    <div class="contact-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>3190 HW-160, Suite F, Pahrump, Nevada 89048</span>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <span>(775) 555-0123</span>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <span>marci@ridgerealtygroup.com</span>
+                    </div>
+                    <div class="hours">
+                        <div style="margin-bottom: 0.5rem;"><i class="far fa-clock"></i> Open today</div>
+                        <div style="font-size: 1.5rem; color: #c7a454;">08:00 am – 07:00 pm</div>
+                        <div style="margin-top: 0.5rem; color: rgba(255,255,255,0.8);">Open daily 8am - 7pm. Appointments outside office hours available upon request.</div>
+                    </div>
+                    <a href="#" class="whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i>
+                        Message us on WhatsApp
+                    </a>
+                </div>
+                <div class="contact-info">
+                    <h3>Office Location</h3>
+                    <div style="width: 100%; height: 300px; background: rgba(255,255,255,0.05); border: 1px solid rgba(199,164,84,0.2); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-map" style="font-size: 3rem; color: #c7a454; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cookie Notice -->
+        <div class="cookie-notice" id="cookieNotice">
+            <p>
+                <i class="fas fa-cookie-bite" style="color: #c7a454; margin-right: 0.5rem;"></i>
+                This website uses cookies to analyze traffic and optimize your experience. 
+                <a href="#">Learn more</a>
+            </p>
+            <button class="cookie-close" id="acceptCookies">ACCEPT</button>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            SCROLL ↓
+        </div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
+
+        // Custom Cursor
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                document.getElementById('loader').style.visibility = 'hidden';
+                document.getElementById('content').classList.add('visible');
+            }, 2000);
+        });
+
+        // Cookie Notice
+        setTimeout(() => {
+            document.getElementById('cookieNotice').classList.add('show');
+        }, 3000);
+
+        document.getElementById('acceptCookies').addEventListener('click', () => {
+            document.getElementById('cookieNotice').classList.remove('show');
+        });
+
+        // GALLERY INTERACTIONS
+        const dots = document.querySelectorAll('.highlight-dot');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const counterSpan = document.querySelector('.gallery-counter span');
+        
+        function setActiveDot(index) {
+            dots.forEach(d => d.classList.remove('active'));
+            dots[index].classList.add('active');
+            
+            if (counterSpan) {
+                counterSpan.textContent = '0' + (index + 1);
+                counterSpan.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    counterSpan.style.transform = 'scale(1)';
+                }, 200);
+            }
+            
+            galleryItems.forEach((item, i) => {
+                if (i === index) {
+                    item.style.transform = 'scale(1.15)';
+                    item.style.zIndex = '20';
+                    item.style.borderColor = '#c7a454';
+                    item.style.boxShadow = '0 50px 100px rgba(199,164,84,0.6)';
+                    item.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    
+                    setTimeout(() => {
+                        item.style.transform = 'scale(1)';
+                        item.style.zIndex = '1';
+                        item.style.borderColor = 'rgba(199,164,84,0.3)';
+                        item.style.boxShadow = '0 20px 40px rgba(0,0,0,0.5)';
+                    }, 400);
+                }
+            });
+        }
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                setActiveDot(index);
+            });
+        });
+        
+        let currentDot = 0;
+        setInterval(() => {
+            currentDot = (currentDot + 1) % dots.length;
+            setActiveDot(currentDot);
+        }, 3000);
+
+        // Parallax effect for gallery items
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+            
+            galleryItems.forEach((item, index) => {
+                if (!item.matches(':hover')) {
+                    const rotateX = mouseY * 5 * (index % 2 === 0 ? 1 : -1);
+                    const rotateY = mouseX * 5 * (index % 2 === 0 ? -1 : 1);
+                    item.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1)`;
+                }
+            });
+        });
+
+        // Three.js Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0f15);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 2, 12);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.enableZoom = false;
+        controls.enablePan = false;
+        controls.maxPolarAngle = Math.PI / 2;
+        controls.minPolarAngle = Math.PI / 3;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404060);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(1, 2, 1);
+        scene.add(dirLight);
+
+        const pointLight1 = new THREE.PointLight(0xc7a454, 1, 20);
+        pointLight1.position.set(2, 3, 4);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0x4a6b8a, 1, 20);
+        pointLight2.position.set(-3, -1, 5);
+        scene.add(pointLight2);
+
+        // Create floating geometric shapes
+        const geometryGroup = new THREE.Group();
+        const colors = [0xc7a454, 0x2c4b3c, 0x4a6b8a, 0x8a6e4a];
+        
+        for (let i = 0; i < 30; i++) {
+            let geometry;
+            const rand = Math.random();
+            
+            if (rand < 0.33) {
+                geometry = new THREE.BoxGeometry(0.3, 0.8, 0.3);
+            } else if (rand < 0.66) {
+                geometry = new THREE.ConeGeometry(0.2, 0.8, 8);
+            } else {
+                geometry = new THREE.CylinderGeometry(0.15, 0.25, 0.8, 6);
+            }
+            
+            const material = new THREE.MeshStandardMaterial({
+                color: colors[Math.floor(Math.random() * colors.length)],
+                emissive: 0x000000,
+                roughness: 0.2,
+                metalness: 0.3,
+                transparent: true,
+                opacity: 0.6,
+                wireframe: false
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            
+            const angle = (i / 30) * Math.PI * 2;
+            const radius = 3 + Math.random() * 2;
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            const y = Math.random() * 2 - 1;
+            
+            mesh.position.set(x, y, z);
+            mesh.rotation.x = Math.random() * Math.PI;
+            mesh.rotation.y = Math.random() * Math.PI;
+            
+            geometryGroup.add(mesh);
+        }
+
+        const sphereGroup = new THREE.Group();
+        for (let i = 0; i < 50; i++) {
+            const geometry = new THREE.SphereGeometry(0.05, 6, 6);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xc7a454,
+                emissive: 0x332211,
+                transparent: true,
+                opacity: 0.3
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            
+            const angle = (i / 50) * Math.PI * 2;
+            const radius = 5;
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            const y = Math.sin(angle * 3) * 2;
+            
+            sphere.position.set(x, y, z);
+            sphereGroup.add(sphere);
+        }
+
+        scene.add(geometryGroup);
+        scene.add(sphereGroup);
+
+        const lineGroup = new THREE.Group();
+        for (let i = 0; i < 10; i++) {
+            const points = [];
+            for (let j = 0; j <= 5; j++) {
+                const t = j / 5;
+                const angle = t * Math.PI * 2 + i;
+                points.push(new THREE.Vector3(
+                    Math.cos(angle) * 4,
+                    Math.sin(angle * 2) * 2,
+                    Math.sin(angle) * 4
+                ));
+            }
+            
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: 0xc7a454, opacity: 0.1, transparent: true });
+            const line = new THREE.Line(geometry, material);
+            lineGroup.add(line);
+        }
+        scene.add(lineGroup);
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            geometryGroup.rotation.y += 0.0005;
+            geometryGroup.rotation.x += 0.0002;
+            
+            sphereGroup.rotation.y -= 0.001;
+            sphereGroup.rotation.x += 0.0003;
+            
+            lineGroup.rotation.y += 0.0002;
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', onWindowResize, false);
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+            
+            geometryGroup.rotation.y += mouseX * 0.0005;
+            sphereGroup.rotation.x += mouseY * 0.0005;
+        });
+
+        // Smooth scroll reveal
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transition = 'all 1s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
